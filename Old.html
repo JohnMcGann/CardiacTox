@@ -1,57 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karen Calls an Ambulance</title>
-    <style>
-        body {
-            background-color: black;
-            color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-        #video-container {
-            position: relative;
-            max-width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        iframe {
-            width: 80vw;
-            height: 45vw; /* Keeps 16:9 ratio */
-            max-height: 600px;
-        }
-        .buttons {
-            margin-top: 20px;
-        }
-        .buttons button {
-            background-color: #ffcc00;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 10px;
-        }
-    </style>
-</head>
-<body>
-
-<h1>Karen Calls an Ambulance</h1>
-
-<div id="video-container">
-    <iframe id="video-player" 
-        src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1" 
-        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-    </iframe>
-</div>
-
-<div class="buttons" id="button-container"></div>
-
 <script>
     const videoPlayer = document.getElementById("video-player");
     const buttonContainer = document.getElementById("button-container");
 
+    // Define video paths and button options
     const videoPaths = {
         "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
             { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
@@ -84,12 +35,25 @@
         ]
     };
 
+    // Set custom delays per video (in milliseconds)
+    const videoDelays = {
+        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": 85000, // 85 sec
+        "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1": 8000, // 8 sec
+        "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": 92000, // 92 sec
+        "https://www.youtube.com/embed/b23ib2Eo8Pw?autoplay=1": 65000, // 65 sec
+        "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": 75000, // 75 sec
+        "https://www.youtube.com/embed/Yun8WwMX4kc?autoplay=1": 78000, // 78 sec
+        "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": 86000, // 86 sec
+        "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1": 60000  // 60 sec
+    };
+
     function showButtonsForVideo(videoUrl) {
-        buttonContainer.innerHTML = ""; // Clear old buttons
+        buttonContainer.innerHTML = ""; // Clear existing buttons
         buttonContainer.style.display = "none"; // Hide buttons initially
 
         if (videoPaths[videoUrl]) {
-            setTimeout(() => { // Delay button appearance by 8 seconds
+            const delay = videoDelays[videoUrl] ? videoDelays[videoUrl] - 8000 : 8000; // Show buttons 8 sec before end
+            setTimeout(() => {
                 videoPaths[videoUrl].forEach(option => {
                     const button = document.createElement("button");
                     button.innerText = option.text;
@@ -97,7 +61,7 @@
                     buttonContainer.appendChild(button);
                 });
                 buttonContainer.style.display = "block"; // Show buttons after delay
-            }, 20000); // 8-second delay
+            }, delay);
         }
     }
 
@@ -107,10 +71,6 @@
         showButtonsForVideo(videoUrl);
     }
 
-    // Start first video buttons after 8 seconds
+    // Start first video with buttons appearing at correct timing
     showButtonsForVideo(videoPlayer.src);
 </script>
-
-
-</body>
-</html>
