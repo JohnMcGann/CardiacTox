@@ -40,10 +40,10 @@
 <h1>Karen Calls an Ambulance</h1>
 
 <div id="video-container">
-<iframe id="video-player" 
-    src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1" 
-    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-</iframe>
+    <iframe id="video-player" 
+        src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+    </iframe>
 </div>
 
 <div class="buttons" id="button-container"></div>
@@ -52,9 +52,9 @@
     const videoPlayer = document.getElementById("video-player");
     const buttonContainer = document.getElementById("button-container");
 
-    // Define all video paths and button choices
+    // Video paths & choices
     const videoPaths = {
-        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&mute=1": [
+        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
             { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
             { text: "Get some history", url: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
         ],
@@ -63,17 +63,17 @@
             { text: "Now get some history", url: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
         ],
         "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": [
-            { text: "This doesn't sound important", url: "CANCEL_SCENE_URL_HERE" }, 
+            { text: "This doesn't sound important", url: "https://www.youtube.com/embed/b23ib2Eo8Pw?autoplay=1" }, 
             { text: "Check some vitals", url: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
         ],
-        "CANCEL_SCENE_URL_HERE": [
+        "https://www.youtube.com/embed/b23ib2Eo8Pw?autoplay=1": [
             { text: "Go back and do my job", url: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
         ],
         "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": [
             { text: "Get an ECG", url: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" },
-            { text: "Ignore everything but the BGL", url: "BGL_VIDEO_URL_HERE" }
+            { text: "Ignore everything but the BGL", url: "https://www.youtube.com/embed/Yun8WwMX4kc?autoplay=1" }
         ],
-        "BGL_VIDEO_URL_HERE": [
+        "https://www.youtube.com/embed/Yun8WwMX4kc?autoplay=1": [
             { text: "Maybe we should get an ECG?", url: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" }
         ],
         "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": [
@@ -86,7 +86,7 @@
     };
 
     function showButtonsForVideo(videoUrl) {
-        buttonContainer.innerHTML = ""; // Clear previous buttons
+        buttonContainer.innerHTML = ""; // Clear old buttons
 
         if (videoPaths[videoUrl]) {
             videoPaths[videoUrl].forEach(option => {
@@ -95,15 +95,19 @@
                 button.onclick = () => playVideo(option.url);
                 buttonContainer.appendChild(button);
             });
+            buttonContainer.style.display = "block"; // Show buttons
+        } else {
+            buttonContainer.style.display = "none"; // Hide if no options
         }
     }
 
     function playVideo(videoUrl) {
+        buttonContainer.style.display = "none"; // Hide buttons when switching videos
         videoPlayer.src = videoUrl;
         showButtonsForVideo(videoUrl);
     }
 
-    // Initialize the first video's buttons
+    // Start first video buttons when it ends
     showButtonsForVideo(videoPlayer.src);
 </script>
 
