@@ -13,109 +13,59 @@
         }
         #video-container {
             position: relative;
-            width: 80%;
+            max-width: 80%;
             margin: auto;
+            overflow: hidden;
         }
-        iframe {
+        video {
             width: 100%;
-            height: 720px; /* Adjusted for 16:9 ratio */
+            height: auto;
+            aspect-ratio: 16 / 9; /* Matches Vyond's format */
         }
         .buttons {
             display: none;
             margin-top: 20px;
         }
         .buttons button {
-            background-color: white;
-            color: black;
+            background-color: #ffcc00;
             border: none;
             padding: 10px 20px;
-            font-size: 16px;
-            margin: 10px;
+            font-size: 18px;
             cursor: pointer;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Karen Calls an Ambulance</h1>
-    
-    <div id="video-container">
-        <iframe id="video-player" src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
+<h1>Karen Calls an Ambulance</h1>
 
-    <div id="buttons" class="buttons">
-        <!-- Buttons will be dynamically inserted here -->
-    </div>
+<div id="video-container">
+    <video id="video-player" autoplay playsinline muted>
+        <source src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&mute=1" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
 
-    <script>
-        var player;
-        var videoMap = {
-            "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
-                { text: "Is that a dog?", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
-                { text: "Get some history", link: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
-            ],
-            "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1": [
-                { text: "Again!", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
-                { text: "Now get some history", link: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
-            ],
-            "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": [
-                { text: "This doesn't sound important", link: "CANCELLATION_VIDEO" },
-                { text: "Check some vitals", link: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
-            ],
-            "CANCELLATION_VIDEO": [
-                { text: "Go back and do my job", link: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
-            ],
-            "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": [
-                { text: "Get an ECG", link: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" },
-                { text: "Ignore everything but the BGL", link: "BGL_VIDEO" }
-            ],
-            "BGL_VIDEO": [
-                { text: "Maybe we should get an ECG?", link: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" }
-            ],
-            "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": [
-                { text: "Do you want to see the dog?", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
-                { text: "Explain some more", link: "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1" }
-            ],
-            "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1": []
-        };
+<div class="buttons" id="button-container">
+    <button onclick="playVideo('https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1')">Is that a dog?</button>
+    <button onclick="playVideo('https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1')">Get some history</button>
+</div>
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('video-player', {
-                events: {
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
+<script>
+    var video = document.getElementById("video-player");
+    var buttons = document.getElementById("button-container");
 
-        function onPlayerStateChange(event) {
-            if (event.data === 0) { // Video ended
-                showButtons();
-            }
-        }
+    video.onended = function() {
+        buttons.style.display = "block"; // Show buttons when video ends
+    };
 
-        function showButtons() {
-            var videoSrc = document.getElementById('video-player').src;
-            var buttonsDiv = document.getElementById('buttons');
-            buttonsDiv.innerHTML = "";
-
-            if (videoMap[videoSrc]) {
-                videoMap[videoSrc].forEach(function(button) {
-                    var btn = document.createElement("button");
-                    btn.innerText = button.text;
-                    btn.onclick = function() { playVideo(button.link); };
-                    buttonsDiv.appendChild(btn);
-                });
-                buttonsDiv.style.display = "block";
-            }
-        }
-
-        function playVideo(videoUrl) {
-            document.getElementById('buttons').style.display = "none";
-            document.getElementById('video-player').src = videoUrl;
-        }
-    </script>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
+    function playVideo(videoUrl) {
+        buttons.style.display = "none"; // Hide buttons when new video starts
+        video.src = videoUrl;
+        video.play();
+    }
+</script>
 
 </body>
 </html>
