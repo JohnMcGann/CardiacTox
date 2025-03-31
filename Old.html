@@ -1,3 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karen Calls an Ambulance</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #video-container {
+            position: relative;
+            max-width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        iframe {
+            width: 80vw;
+            height: 45vw; /* Keeps 16:9 ratio */
+            max-height: 600px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .buttons button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Karen Calls an Ambulance</h1>
+
+<div id="video-container">
+    <iframe id="video-player" 
+        src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+    </iframe>
+</div>
+
+<div class="buttons" id="button-container"></div>
+
 <script>
     const videoPlayer = document.getElementById("video-player");
     const buttonContainer = document.getElementById("button-container");
@@ -74,3 +124,6 @@
     // Start first video with buttons appearing at correct timing
     showButtonsForVideo(videoPlayer.src);
 </script>
+    
+</body>
+</html>
