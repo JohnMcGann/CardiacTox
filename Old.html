@@ -52,7 +52,6 @@
     const videoPlayer = document.getElementById("video-player");
     const buttonContainer = document.getElementById("button-container");
 
-    // Video paths & choices
     const videoPaths = {
         "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
             { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
@@ -87,17 +86,18 @@
 
     function showButtonsForVideo(videoUrl) {
         buttonContainer.innerHTML = ""; // Clear old buttons
+        buttonContainer.style.display = "none"; // Hide buttons initially
 
         if (videoPaths[videoUrl]) {
-            videoPaths[videoUrl].forEach(option => {
-                const button = document.createElement("button");
-                button.innerText = option.text;
-                button.onclick = () => playVideo(option.url);
-                buttonContainer.appendChild(button);
-            });
-            buttonContainer.style.display = "block"; // Show buttons
-        } else {
-            buttonContainer.style.display = "none"; // Hide if no options
+            setTimeout(() => { // Delay button appearance by 8 seconds
+                videoPaths[videoUrl].forEach(option => {
+                    const button = document.createElement("button");
+                    button.innerText = option.text;
+                    button.onclick = () => playVideo(option.url);
+                    buttonContainer.appendChild(button);
+                });
+                buttonContainer.style.display = "block"; // Show buttons after delay
+            }, 8000); // 8-second delay
         }
     }
 
@@ -107,9 +107,10 @@
         showButtonsForVideo(videoUrl);
     }
 
-    // Start first video buttons when it ends
+    // Start first video buttons after 8 seconds
     showButtonsForVideo(videoPlayer.src);
 </script>
+
 
 </body>
 </html>
