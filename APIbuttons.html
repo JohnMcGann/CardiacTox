@@ -48,98 +48,55 @@
 <div class="buttons" id="button-container"></div>
 
 <script>
-    let player;
-    let buttonContainer = document.getElementById("button-container");
+    const videoPlayer = document.getElementById("video-player");
+    const buttonContainer = document.getElementById("button-container");
 
-    // Define all the video options and their buttons
+    // Define video paths and button options
     const videoPaths = {
-        "lRw4K3bcvcI": [ // Opening Video
-            { text: "Is that a dog?", videoId: "pIowjZlUI3A" },
-            { text: "Get some history", videoId: "x1g3l29XhqI" }
-        ],
-        "pIowjZlUI3A": [ // Dog Video
-            { text: "Again!", videoId: "pIowjZlUI3A" },
-            { text: "Now get some history", videoId: "x1g3l29XhqI" }
-        ],
-        "x1g3l29XhqI": [ // History Video
-            { text: "This doesn't sound important", videoId: "b23ib2Eo8Pw" }, 
-            { text: "Check some vitals", videoId: "FmNvgkVk4G4" }
-        ],
-        "b23ib2Eo8Pw": [ // Cancellation Scene
-            { text: "Go back and do my job", videoId: "FmNvgkVk4G4" }
-        ],
-        "FmNvgkVk4G4": [ // Vitals Video
-            { text: "Get an ECG", videoId: "Dh3wTfhovEM" },
-            { text: "Ignore everything but the BGL", videoId: "Yun8WwMX4kc" }
-        ],
-        "Yun8WwMX4kc": [ // BGL Video
-            { text: "Maybe we should get an ECG?", videoId: "Dh3wTfhovEM" }
-        ],
-        "Dh3wTfhovEM": [ // 12-Lead ECG Video
-            { text: "Do you want to see the dog?", videoId: "pIowjZlUI3A" },
-            { text: "Explain some more", videoId: "5KonTOqq1EI" }
-        ],
-        "5KonTOqq1EI": [ // Beta-Blocker Explainer Video
-            { text: "End of Presentation", videoId: "#" }
+        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
+            { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+            { text: "Get some history", url: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
         ]
     };
 
-    // Video durations in seconds
+    // Set custom delays per video (in milliseconds)
     const videoDelays = {
-        "lRw4K3bcvcI": 100,  // 100 sec
-        "pIowjZlUI3A": 4,    // 4 sec
-        "x1g3l29XhqI": 258,  // 258 sec
-        "b23ib2Eo8Pw": 29,   // 29 sec
-        "FmNvgkVk4G4": 34,   // 34 sec
-        "Yun8WwMX4kc": 29,   // 29 sec
-        "Dh3wTfhovEM": 75,   // 75 sec
-        "5KonTOqq1EI": 249   // 249 sec
+        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": 10000 // 10 sec (testing delay)
     };
 
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('video-player', {
-            height: '360',
-            width: '640',
-            videoId: "lRw4K3bcvcI", // Start with the opening video
-            playerVars: { 'autoplay': 1, 'playsinline': 1, 'mute': 0 },
-            events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
-        });
-    }
-
-    function onPlayerReady(event) {
-        event.target.playVideo();
-        showButtonsForVideo(player.getVideoData().video_id);
-    }
-
-    function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING) {
-            showButtonsForVideo(player.getVideoData().video_id);
-        }
-    }
-
-    function showButtonsForVideo(videoId) {
-        buttonContainer.innerHTML = ""; // Clear old buttons
+    function showButtonsForVideo(videoUrl) {
+        buttonContainer.innerHTML = ""; // Clear existing buttons
         buttonContainer.style.display = "none"; // Hide buttons initially
 
-        if (videoPaths[videoId]) {
-            let delay = (videoDelays[videoId] || 8) - 8; // Show buttons 8 sec before video ends
+        console.log("Video ended: " + videoUrl); // Debugging line
+
+        if (videoPaths[videoUrl]) {
+            console.log("Creating buttons for: " + videoUrl); // Debugging line
 
             setTimeout(() => {
-                videoPaths[videoId].forEach(option => {
+                videoPaths[videoUrl].forEach(option => {
+                    console.log("Adding button: " + option.text); // Debugging line
+
                     const button = document.createElement("button");
                     button.innerText = option.text;
-                    button.onclick = () => playVideo(option.videoId);
+                    button.onclick = () => playVideo(option.url);
                     buttonContainer.appendChild(button);
                 });
+
                 buttonContainer.style.display = "block"; // Show buttons
-            }, delay * 1000);
+                console.log("Buttons should now be visible");
+            }, videoDelays[videoUrl] || 8000); // Default delay of 8 sec
         }
     }
 
-    function playVideo(videoId) {
+    function playVideo(videoUrl) {
         buttonContainer.style.display = "none"; // Hide buttons when switching videos
-        player.loadVideoById(videoId);
+        videoPlayer.src = videoUrl;
+        showButtonsForVideo(videoUrl);
     }
+
+    // Start first video with buttons appearing at correct timing
+    showButtonsForVideo(videoPlayer.src);
 </script>
 
 </body>
