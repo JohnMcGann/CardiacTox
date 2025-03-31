@@ -48,22 +48,71 @@
 </div>
 
 <div class="buttons" id="button-container">
-    <button onclick="playVideo('https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1')">Is that a dog?</button>
-    <button onclick="playVideo('https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1')">Get some history</button>
+    <!-- Buttons dynamically change based on the video being played -->
 </div>
 
 <script>
-    function showButtons() {
-        document.getElementById("button-container").style.display = "block";
+    const videoPlayer = document.getElementById("video-player");
+    const buttonContainer = document.getElementById("button-container");
+
+    // Define all the video options and their buttons
+    const videoPaths = {
+        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
+            { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+            { text: "Get some history", url: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
+        ],
+        "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1": [
+            { text: "Again!", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+            { text: "Now get some history", url: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
+        ],
+        "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": [
+            { text: "This doesn't sound important", url: "CANCEL_SCENE_URL_HERE" }, 
+            { text: "Check some vitals", url: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
+        ],
+        "CANCEL_SCENE_URL_HERE": [
+            { text: "Go back and do my job", url: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
+        ],
+        "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": [
+            { text: "Get an ECG", url: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" },
+            { text: "Ignore everything but the BGL", url: "BGL_VIDEO_URL_HERE" }
+        ],
+        "BGL_VIDEO_URL_HERE": [
+            { text: "Maybe we should get an ECG?", url: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" }
+        ],
+        "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": [
+            { text: "Do you want to see the dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+            { text: "Explain some more", url: "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1" }
+        ],
+        "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1": [
+            { text: "End of Presentation", url: "#" }
+        ]
+    };
+
+    function showButtonsForVideo(videoUrl) {
+        buttonContainer.innerHTML = ""; // Clear old buttons
+        buttonContainer.style.display = "none"; // Hide buttons initially
+
+        if (videoPaths[videoUrl]) {
+            setTimeout(() => { // Delay buttons appearing until video ends
+                videoPaths[videoUrl].forEach(option => {
+                    const button = document.createElement("button");
+                    button.innerText = option.text;
+                    button.onclick = () => playVideo(option.url);
+                    buttonContainer.appendChild(button);
+                });
+                buttonContainer.style.display = "block"; // Show buttons
+            }, 85000); // Adjust delay time (in milliseconds) to match the video length
+        }
     }
 
     function playVideo(videoUrl) {
-        document.getElementById("button-container").style.display = "none"; 
-        document.getElementById("video-player").src = videoUrl;
+        buttonContainer.style.display = "none"; // Hide buttons when switching videos
+        videoPlayer.src = videoUrl;
+        showButtonsForVideo(videoUrl);
     }
 
-    // Automatically show buttons after video ends (workaround for YouTube videos)
-    setTimeout(showButtons, 85000); // Adjust this to match video length (85 sec = 1 min 25 sec)
+    // Start first video buttons when it ends
+    showButtonsForVideo(videoPlayer.src);
 </script>
 
 </body>
