@@ -18,12 +18,11 @@
             overflow: hidden;
         }
         iframe {
-            width: 90vw;
-            height: 50.625vw; /* Keeps 16:9 ratio */
-            max-height: 800px;
+            width: 80vw;
+            height: 45vw; /* Keeps 16:9 ratio */
+            max-height: 600px;
         }
         .buttons {
-            display: none;
             margin-top: 20px;
         }
         .buttons button {
@@ -41,10 +40,10 @@
 <h1>Karen Calls an Ambulance</h1>
 
 <div id="video-container">
-<iframe id="video-player" 
-    src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1" 
-    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-</iframe>
+    <iframe id="video-player" 
+        src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&mute=1" 
+        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+    </iframe>
 </div>
 
 <div class="buttons" id="button-container"></div>
@@ -53,7 +52,7 @@
     const videoPlayer = document.getElementById("video-player");
     const buttonContainer = document.getElementById("button-container");
 
-    // Define all the video options and their buttons
+    // Define all video paths and button choices
     const videoPaths = {
         "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&mute=1": [
             { text: "Is that a dog?", url: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
@@ -86,42 +85,25 @@
         ]
     };
 
-    // Video durations (in milliseconds)
-    const videoDurations = {
-        "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&mute=1": 85000,
-        "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1": 70000,
-        "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": 92000,
-        "CANCEL_SCENE_URL_HERE": 65000,
-        "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": 75000,
-        "BGL_VIDEO_URL_HERE": 78000,
-        "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": 86000,
-        "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1": 60000
-    };
-
     function showButtonsForVideo(videoUrl) {
-        buttonContainer.innerHTML = ""; // Clear old buttons
-        buttonContainer.style.display = "none"; // Hide buttons initially
+        buttonContainer.innerHTML = ""; // Clear previous buttons
 
         if (videoPaths[videoUrl]) {
-            setTimeout(() => { // Delay buttons appearing until video ends
-                videoPaths[videoUrl].forEach(option => {
-                    const button = document.createElement("button");
-                    button.innerText = option.text;
-                    button.onclick = () => playVideo(option.url);
-                    buttonContainer.appendChild(button);
-                });
-                buttonContainer.style.display = "block"; // Show buttons
-            }, videoDurations[videoUrl] || 80000); // Default delay if video time is unknown
+            videoPaths[videoUrl].forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option.text;
+                button.onclick = () => playVideo(option.url);
+                buttonContainer.appendChild(button);
+            });
         }
     }
 
-function playVideo(videoUrl) {
-    buttonContainer.style.display = "none"; // Hide buttons when switching videos
-    videoPlayer.src = videoUrl; // Change the video
-    showButtonsForVideo(videoUrl); // Re-check and show the correct buttons for the new video
-}
+    function playVideo(videoUrl) {
+        videoPlayer.src = videoUrl;
+        showButtonsForVideo(videoUrl);
+    }
 
-    // Start first video buttons when it ends
+    // Initialize the first video's buttons
     showButtonsForVideo(videoPlayer.src);
 </script>
 
