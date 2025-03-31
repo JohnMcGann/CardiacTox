@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive EMS Video</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+        }
+        #video-container {
+            margin: auto;
+            width: 80%;
+            max-width: 1000px; /* Makes the video larger */
+        }
+        iframe {
+            width: 100%;
+            height: 550px; /* Increased height for better viewing */
+            border: none;
+        }
+        .buttons {
+            display: none; /* Initially hidden, will appear when video ends */
+            margin-top: 20px;
+        }
+        .button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Interactive EMS Training</h1>
+
+    <div id="video-container">
+        <iframe id="video-frame" src="https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1&enablejsapi=1" allowfullscreen></iframe>
+    </div>
+
+    <div id="buttons" class="buttons">
+        <button class="button" onclick="playVideo('https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1')">Is That a Dog?</button>
+        <button class="button" onclick="playVideo('https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1')">Get Some History</button>
+    </div>
+
+    <script>
+        // Function to load and play a new video
+        function playVideo(videoUrl) {
+            document.getElementById("video-frame").src = videoUrl;
+            document.getElementById("buttons").style.display = "none"; // Hide buttons when a new video loads
+
+            // Wait for video to end before showing buttons again
+            setTimeout(checkVideoEnded, 5000); // Adjusted timing if needed
+        }
+
+        // Function to check when video ends (delays buttons appearing)
+        function checkVideoEnded() {
+            // Simulate waiting for the video to end (YouTube API would be needed for real detection)
+            setTimeout(() => {
+                document.getElementById("buttons").style.display = "block";
+            }, 10000); // Adjust time based on video length
+        }
+    </script>
+
+</body>
+</html>
