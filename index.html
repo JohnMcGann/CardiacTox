@@ -18,7 +18,7 @@
         }
         iframe {
             width: 100%;
-            height: 500px;
+            height: 720px; /* Adjusted for 16:9 ratio */
         }
         .buttons {
             display: none;
@@ -44,12 +44,41 @@
     </div>
 
     <div id="buttons" class="buttons">
-        <button onclick="playVideo('https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1')">Is that a dog?</button>
-        <button onclick="playVideo('https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1')">Get some history</button>
+        <!-- Buttons will be dynamically inserted here -->
     </div>
 
     <script>
         var player;
+        var videoMap = {
+            "https://www.youtube.com/embed/lRw4K3bcvcI?autoplay=1": [
+                { text: "Is that a dog?", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+                { text: "Get some history", link: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
+            ],
+            "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1": [
+                { text: "Again!", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+                { text: "Now get some history", link: "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1" }
+            ],
+            "https://www.youtube.com/embed/x1g3l29XhqI?autoplay=1": [
+                { text: "This doesn't sound important", link: "CANCELLATION_VIDEO" },
+                { text: "Check some vitals", link: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
+            ],
+            "CANCELLATION_VIDEO": [
+                { text: "Go back and do my job", link: "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1" }
+            ],
+            "https://www.youtube.com/embed/FmNvgkVk4G4?autoplay=1": [
+                { text: "Get an ECG", link: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" },
+                { text: "Ignore everything but the BGL", link: "BGL_VIDEO" }
+            ],
+            "BGL_VIDEO": [
+                { text: "Maybe we should get an ECG?", link: "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1" }
+            ],
+            "https://www.youtube.com/embed/Dh3wTfhovEM?autoplay=1": [
+                { text: "Do you want to see the dog?", link: "https://www.youtube.com/embed/pIowjZlUI3A?autoplay=1" },
+                { text: "Explain some more", link: "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1" }
+            ],
+            "https://www.youtube.com/embed/5KonTOqq1EI?autoplay=1": []
+        };
+
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('video-player', {
                 events: {
@@ -60,7 +89,23 @@
 
         function onPlayerStateChange(event) {
             if (event.data === 0) { // Video ended
-                document.getElementById('buttons').style.display = "block";
+                showButtons();
+            }
+        }
+
+        function showButtons() {
+            var videoSrc = document.getElementById('video-player').src;
+            var buttonsDiv = document.getElementById('buttons');
+            buttonsDiv.innerHTML = "";
+
+            if (videoMap[videoSrc]) {
+                videoMap[videoSrc].forEach(function(button) {
+                    var btn = document.createElement("button");
+                    btn.innerText = button.text;
+                    btn.onclick = function() { playVideo(button.link); };
+                    buttonsDiv.appendChild(btn);
+                });
+                buttonsDiv.style.display = "block";
             }
         }
 
