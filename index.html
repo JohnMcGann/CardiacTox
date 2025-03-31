@@ -115,11 +115,11 @@
         }
     }
 
-    function playVideo(videoUrl) {
-        buttonContainer.style.display = "none"; // Hide buttons when switching videos
-        videoPlayer.src = videoUrl;
-        showButtonsForVideo(videoUrl);
-    }
+function playVideo(videoUrl) {
+    buttonContainer.style.display = "none"; // Hide buttons when switching videos
+    videoPlayer.src = videoUrl; // Change the video
+    showButtonsForVideo(videoUrl); // Re-check and show the correct buttons for the new video
+}
 
     // Start first video buttons when it ends
     showButtonsForVideo(videoPlayer.src);
