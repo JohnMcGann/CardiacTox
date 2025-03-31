@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karen Calls an Ambulance</title>
+    <script src="https://www.youtube.com/iframe_api"></script> <!-- Load YouTube API -->
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        #video-container {
+            position: relative;
+            max-width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        iframe {
+            width: 80vw;
+            height: 45vw; /* Keeps 16:9 ratio */
+            max-height: 600px;
+        }
+        .buttons {
+            display: none;
+            margin-top: 20px;
+        }
+        .buttons button {
+            background-color: #ffcc00;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Karen Calls an Ambulance</h1>
+
+<div id="video-container">
+    <div id="video-player"></div> <!-- YouTube video will load here -->
+</div>
+
+<div class="buttons" id="button-container"></div>
+
+<script>
+    let player;
+    let buttonContainer = document.getElementById("button-container");
+
+    // Define all the video options and their buttons
+    const videoPaths = {
+        "lRw4K3bcvcI": [ // Opening Video
+            { text: "Is that a dog?", videoId: "pIowjZlUI3A" },
+            { text: "Get some history", videoId: "x1g3l29XhqI" }
+        ],
+        "pIowjZlUI3A": [ // Dog Video
+            { text: "Again!", videoId: "pIowjZlUI3A" },
+            { text: "Now get some history", videoId: "x1g3l29XhqI" }
+        ],
+        "x1g3l29XhqI": [ // History Video
+            { text: "This doesn't sound important", videoId: "b23ib2Eo8Pw" }, 
+            { text: "Check some vitals", videoId: "FmNvgkVk4G4" }
+        ],
+        "b23ib2Eo8Pw": [ // Cancellation Scene
+            { text: "Go back and do my job", videoId: "FmNvgkVk4G4" }
+        ],
+        "FmNvgkVk4G4": [ // Vitals Video
+            { text: "Get an ECG", videoId: "Dh3wTfhovEM" },
+            { text: "Ignore everything but the BGL", videoId: "Yun8WwMX4kc" }
+        ],
+        "Yun8WwMX4kc": [ // BGL Video
+            { text: "Maybe we should get an ECG?", videoId: "Dh3wTfhovEM" }
+        ],
+        "Dh3wTfhovEM": [ // 12-Lead ECG Video
+            { text: "Do you want to see the dog?", videoId: "pIowjZlUI3A" },
+            { text: "Explain some more", videoId: "5KonTOqq1EI" }
+        ],
+        "5KonTOqq1EI": [ // Beta-Blocker Explainer Video
+            { text: "End of Presentation", videoId: "#" }
+        ]
+    };
+
+    // Video durations in seconds
+    const videoDelays = {
+        "lRw4K3bcvcI": 100,  // 100 sec
+        "pIowjZlUI3A": 4,    // 4 sec
+        "x1g3l29XhqI": 258,  // 258 sec
+        "b23ib2Eo8Pw": 29,   // 29 sec
+        "FmNvgkVk4G4": 34,   // 34 sec
+        "Yun8WwMX4kc": 29,   // 29 sec
+        "Dh3wTfhovEM": 75,   // 75 sec
+        "5KonTOqq1EI": 249   // 249 sec
+    };
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('video-player', {
+            height: '360',
+            width: '640',
+            videoId: "lRw4K3bcvcI", // Start with the opening video
+            playerVars: { 'autoplay': 1, 'playsinline': 1, 'mute': 0 },
+            events: { 'onReady': onPlayerReady, 'onStateChange': onPlayerStateChange }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+        showButtonsForVideo(player.getVideoData().video_id);
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            showButtonsForVideo(player.getVideoData().video_id);
+        }
+    }
+
+    function showButtonsForVideo(videoId) {
+        buttonContainer.innerHTML = ""; // Clear old buttons
+        buttonContainer.style.display = "none"; // Hide buttons initially
+
+        if (videoPaths[videoId]) {
+            let delay = (videoDelays[videoId] || 8) - 8; // Show buttons 8 sec before video ends
+
+            setTimeout(() => {
+                videoPaths[videoId].forEach(option => {
+                    const button = document.createElement("button");
+                    button.innerText = option.text;
+                    button.onclick = () => playVideo(option.videoId);
+                    buttonContainer.appendChild(button);
+                });
+                buttonContainer.style.display = "block"; // Show buttons
+            }, delay * 1000);
+        }
+    }
+
+    function playVideo(videoId) {
+        buttonContainer.style.display = "none"; // Hide buttons when switching videos
+        player.loadVideoById(videoId);
+    }
+</script>
+
+</body>
+</html>
